@@ -114,7 +114,7 @@ main {
     width: 100%;
     top: 4.7pc;
     padding: 0;
-    /* background-color: linear-gradient(var(--color-active), var(--color-message)); */
+    background-color: var(--color-bg-dark);
     margin: 0;
 }
 

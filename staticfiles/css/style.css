@@ -88,8 +88,6 @@ a {
   align-items: center;
   display: flex;
   padding-left: 5px;
-  border: none;
-  outline: none;
 }
 
 .round__sidebar svg{
@@ -103,56 +101,6 @@ a {
   gap: 1pc;
 }
 
-/* ===== sidebar section ===== */
-
-.sidebar {
-    height: 100vh; /* Full height of the viewport */
-    width: 250px; /* Sidebar width */
-    position: fixed; /* Fixed to the left side */
-    left: -250px; /* Initially hidden off-screen */
-    top: 0;
-    background-color: var(--color-bg-dark); /* Dark background */
-    color: var(--color-font);
-    transition: left 0.3s ease; /* Smooth transition for opening/closing */
-    padding-top: 20px;
-}
-
-/* Sidebar Title */
-.sidebar h2 {
-    text-align: center;
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-/* Sidebar Links */
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar ul li {
-    padding: 15px;
-    text-align: center;
-}
-
-.sidebar ul li a {
-    text-decoration: none;
-    color: white;
-    font-size: 18px;
-    display: block;
-}
-
-.sidebar ul li a:hover {
-    background-color: #575757; /* Darker shade on hover */
-}
-
-.sidebar.active {
-    left: 0; /* Adjust content position */
-}
-
-
-
 /*========= components =========*/
 
 .container {
@@ -160,7 +108,6 @@ a {
   height: auto;
   margin-top: 4.5pc;
   position: relative;
-  background-color: var(--color-bg-dark);
 }
 
 footer > .container {
