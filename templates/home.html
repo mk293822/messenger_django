@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <title>Chats</title>
+  </head>
+  <body>
+    <!-- header section -->
+    <header>
+      <div class="header">
+        <div class="header__sidebar">
+          <div class="round__sidebar">
+            <svg
+              version="1.1"
+              id="Capa_1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              viewBox="0 0 124 124"
+              xml:space="preserve"
+            >
+              <g>
+                <path
+                  d="M112,6H12C5.4,6,0,11.4,0,18s5.4,12,12,12h100c6.6,0,12-5.4,12-12S118.6,6,112,6z"
+                />
+                <path
+                  d="M112,50H12C5.4,50,0,55.4,0,62c0,6.6,5.4,12,12,12h100c6.6,0,12-5.4,12-12C124,55.4,118.6,50,112,50z"
+                />
+                <path
+                  d="M112,94H12c-6.6,0-12,5.4-12,12s5.4,12,12,12h100c6.6,0,12-5.4,12-12S118.6,94,112,94z"
+                />
+              </g>
+            </svg>
+          </div>
+          <h1>Chats</h1>
+        </div>
+        <div class="header_right">
+          <a href="{% url 'request_friend' %}" class="request_noti">
+            <img
+              src="{% static 'assets/notification-bell-svgrepo-com.svg' %}"
+            />
+          </a>
+          <a href="{% url 'add_friend' %}" class="add__friend">
+            <img src="{% static 'assets/add-plus.svg' %}" />
+          </a>
+        </div>
+      </div>
+    </header>
+    <!-- body section -->
+    <div class="container">
+      <!-- search bar -->
+      <nav>
+        <div class="search_form">
+          <form action="" method="get" class="search__form">
+            <label>
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M17.0392 15.6244C18.2714 14.084 19.0082 12.1301 19.0082 10.0041C19.0082 5.03127 14.9769 1 10.0041 1C5.03127 1 1 5.03127 1 10.0041C1 14.9769 5.03127 19.0082 10.0041 19.0082C12.1301 19.0082 14.084 18.2714 15.6244 17.0392L21.2921 22.707C21.6828 23.0977 22.3163 23.0977 22.707 22.707C23.0977 22.3163 23.0977 21.6828 22.707 21.2921L17.0392 15.6244ZM10.0041 17.0173C6.1308 17.0173 2.99087 13.8774 2.99087 10.0041C2.99087 6.1308 6.1308 2.99087 10.0041 2.99087C13.8774 2.99087 17.0173 6.1308 17.0173 10.0041C17.0173 13.8774 13.8774 17.0173 10.0041 17.0173Z"
+                />
+              </svg>
+              <input type="search" name="q" placeholder="Search" />
+            </label>
+          </form>
+        </div>
+      </nav>
+      <div class="though__container">
+        <div class="user__though">
+          <img src="{{user_info.avatar.url}}" />
+          <p>Your note</p>
+        </div>
+        {% for room in private_rooms %}
+        <a href="{% url 'message_room' room.id %}" class="other_users__though">
+          <img src="{{room.friend.user_info.avatar.url}}" />
+          <p>{{room.friend.username}}</p>
+        </a>
+        {% endfor %}
+      </div>
+      <!-- users -->
+      <main>
+        {% for room in private_rooms %}
+        <a href="{% url 'message_room' room.id %}" class="user__container">
+          <img src="{{room.friend.user_info.avatar.url}}" class="user__img" />
+          <div class="details__container">
+            <p>{{room.friend.first_name}} {{room.friend.last_name}}</p>
+            <p>@ {{room.friend.username}} {{room.id}}</p>
+          </div>
+        </a>
+        {% endfor %} {% if request.user.is_authenticated %}
+        <h1>Hello{{request.user.username}}</h1>
+        <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+        <div class="user__container__footer"></div>
+      </main>
+    </div>
+    <!-- footer section -->
+    <footer>
+      <div class="container">
+        <a href="" class="active">
+          <svg
+            width="800px"
+            height="800px"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M21.0039 12C21.0039 16.9706 16.9745 21 12.0039 21C9.9675 21 3.00463 21 3.00463 21C3.00463 21 4.56382 17.2561 3.93982 16.0008C3.34076 14.7956 3.00391 13.4372 3.00391 12C3.00391 7.02944 7.03334 3 12.0039 3C16.9745 3 21.0039 7.02944 21.0039 12Z"
+              stroke="#000000"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <p>Chats</p>
+        </a>
+        <a href="">
+          <svg
+            fill="#000000"
+            height="800px"
+            width="800px"
+            version="1.1"
+            id="Layer_1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 0 512.043 512.043"
+            xml:space="preserve"
+          >
+            <g>
+              <g>
+                <path
+                  d="M442.222,0H176.473c-32.651,0-59.115,26.474-59.115,59.136v47.531H69.821c-32.667,0-59.136,26.469-59.136,59.136v180.395
+			c0,32.667,26.469,59.136,59.136,59.136h4.864v85.333c0,19.006,22.979,28.524,36.418,15.085l100.418-100.418h124.027
+			c32.667,0,59.136-26.469,59.136-59.136v-47.531h47.537c32.667,0,59.136-26.469,59.136-59.136V59.136
+			C501.358,26.469,474.889,0,442.222,0z M352.018,346.197c0,9.103-7.366,16.469-16.469,16.469H202.685
+			c-5.658,0-11.084,2.248-15.085,6.248l-70.248,70.248V384c0-11.782-9.551-21.333-21.333-21.333H69.821
+			c-9.103,0-16.469-7.366-16.469-16.469V165.803c0-9.103,7.366-16.469,16.469-16.469h68.87h196.858
+			c9.103,0,16.469,7.366,16.469,16.469V346.197z M458.691,239.531c0,9.103-7.366,16.469-16.469,16.469h-47.531v-90.197
+			c0-32.667-26.469-59.136-59.136-59.136h-0.006H160.025V59.136c0-9.102,7.365-16.469,16.448-16.469h265.749
+			c9.103,0,16.469,7.366,16.469,16.469V239.531z"
+                />
+              </g>
+            </g>
+          </svg>
+          <p>Stories</p>
+        </a>
+      </div>
+    </footer>
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
+</html>

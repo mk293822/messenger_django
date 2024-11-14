@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/message.css' %}" />
+    <title>Message</title>
+  </head>
+  <body>
+    <!-- header section -->
+    <header>
+      <div class="header">
+        <div class="header__left">
+          <a href="{% url 'home' %}" class="back">
+            <img src="{% static 'assets/arrow-back-basic-svgrepo-com.svg' %}" />
+          </a>
+          <a class="round__user">
+            <img src="{{room.friend.user_info.avatar.url}}" />
+          </a>
+          <a class="name__info">
+            <p>{{room.friend.username}}</p>
+          </a>
+        </div>
+        <div class="header__right">
+          <a class="call__container">
+            <img
+              src="{% static 'assets/phone-call-answer-svgrepo-com.svg' %}"
+            />
+          </a>
+          <a class="videocall__container">
+            <img src="{% static 'assets/video-recorder-svgrepo-com.svg' %}" />
+          </a>
+          <a class="about__container">
+            <img src="{% static 'assets/about-filled-svgrepo-com.svg' %}" />
+          </a>
+        </div>
+      </div>
+    </header>
+    <!-- body section -->
+    <main>
+      <div class="container">
+        <a class="message__topic">
+          <img src="{{room.friend.user_info.avatar.url}}" />
+          <p>{{room.friend.username}}</p>
+          <small>12:00</small>
+        </a>
+        <input type="hidden" value="{{messages.count}}" class="count" />
+        {% for message in messages %} {% if message.user != request.user %}
+        <div class="message receive">
+          <div class="round__img">
+            <img src="{{message.user.user_info.avatar.url}}" />
+          </div>
+          <button class="message__button">{{message.content}}</button>
+        </div>
+        {% else %}
+        <div class="message sent">
+          <button class="message__button">{{message.content}}</button>
+        </div>
+        {% endif %} {% endfor %}
+      </div>
+    </main>
+
+    <!-- footer section -->
+    <footer>
+      <div class="footer">
+        <a href="" class="plus__container">
+          <img src="{% static 'assets/add-plus-circle-svgrepo-com.svg' %}" />
+        </a>
+        <a class="camera__container" href="">
+          <img
+            src="{% static 'assets/photo-camera-photograph-svgrepo-com.svg' %}"
+          />
+        </a>
+        <a href="" class="gallery__container">
+          <img src="{% static 'assets/image-svgrepo-com.svg' %}" />
+        </a>
+        <a href="" class="microphone__container">
+          <img src="{% static 'assets/microphone-alt-1-svgrepo-com.svg' %}" />
+        </a>
+        <form class="input__form" action="" method="post">
+          {% csrf_token %}
+          <input type="text" name="message" placeholder="Message" />
+        </form>
+        <a href="" class="like__container">
+          <img src="{% static 'assets/like-1385-svgrepo-com.svg' %}" />
+        </a>
+      </div>
+    </footer>
+
+    <script>
+      window.onload = function () {
+        const messagesContainer = document.querySelector(".container");
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      };
+    </script>
+  </body>
+</html>

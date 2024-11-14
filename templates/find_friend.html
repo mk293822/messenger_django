@@ -1,0 +1,25 @@
+{% extends 'add_friend.html' %} {% load static %} {% block content %}
+
+<main>
+  <h3>Suggest friends</h3>
+  <hr />
+  <div class="container">
+    {% for user in available_friends %}
+    <a href="" class="user__container">
+      <img src="{{user.user_info.avatar.url}}" class="user__img" />
+      <div class="details__container">
+        <p>{{user.first_name}} {{user.last_name}}</p>
+        <p>{{user.id}}</p>
+      </div>
+      <div class="add_friend">
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="user-id" value="{{user.id}}" />
+          <input type="submit" value="Add" />
+        </form>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</main>
+{% endblock content %}
