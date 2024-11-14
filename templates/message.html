@@ -31,9 +31,17 @@
           <a class="videocall__container">
             <img src="{% static 'assets/video-recorder-svgrepo-com.svg' %}" />
           </a>
-          <a class="about__container">
+          <a class="dropdown-button">
             <img src="{% static 'assets/about-filled-svgrepo-com.svg' %}" />
           </a>
+
+          <div class="dropdown-menu">
+            <form method="post">
+              {% csrf_token %}
+              <input type="hidden" value="{{room.id}}" name="room_id" />
+              <input type="submit" value="Unfriend" />
+            </form>
+          </div>
         </div>
       </div>
     </header>
@@ -88,11 +96,6 @@
       </div>
     </footer>
 
-    <script>
-      window.onload = function () {
-        const messagesContainer = document.querySelector(".container");
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-      };
-    </script>
+    <script src="{% static 'js/script.js' %}"></script>
   </body>
 </html>

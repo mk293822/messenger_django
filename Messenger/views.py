@@ -46,11 +46,23 @@ def home(request):
 def message_room_view(request, pk):
     room = Private_rooms.objects.get(id=pk)
     messages = Private_messages.objects.filter(room=room)
+    user_info = User_Info.objects.get(user=request.user)
 
     if request.method == 'POST':
         message = request.POST.get('message')
-        Private_messages.objects.create(content=message, room=room, user=request.user)
-
+        room_id = request.POST.get('room_id')
+        # print(room_id)
+        if message:
+            message = message.strip()
+            if message:
+                Private_messages.objects.create(content=message, room=room, user=request.user)
+        elif room_id:
+            room_to_delete = Private_rooms.objects.get(id=room_id)
+            if room_to_delete.friend in user_info.friends.all():
+                user_info.friends.remove(room_to_delete.friend)
+                room_to_delete.delete()
+                return redirect('home')
+            
     context = {
         'room': room,
         'messages': messages
@@ -88,6 +100,7 @@ def requested_friend_view(request):
             accept_user= User.objects.get(id=accept)
             user_info.friends.add(accept_user)
             user_info.request_friend.remove(accept_user)
+            accept_user.user_info.friends.add(request.user)
         elif deny:
             deny_user = User.objects.get(id=deny)
             user_info.request_friend.remove(deny_user)
