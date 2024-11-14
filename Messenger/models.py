@@ -35,9 +35,12 @@ class Private_rooms(models.Model):
     friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friend')
     created = models.DateTimeField(auto_now=True, editable=False)
     updated = models.DateTimeField(auto_now_add=True, editable=False)
-
+  
     class Meta:
         ordering = ['-created', '-updated']
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'friend'], name='unique_room_between_users')
+        ]
 
     def __str__(self):
         return str(self.id)

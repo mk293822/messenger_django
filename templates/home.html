@@ -38,9 +38,13 @@
         </div>
         <div class="header_right">
           <a href="{% url 'request_friend' %}" class="request_noti">
+            {% if have_request %}
+            <img src="{% static 'assets/notification-bell.svg' %}" />
+            {% else %}
             <img
               src="{% static 'assets/notification-bell-svgrepo-com.svg' %}"
             />
+            {% endif %}
           </a>
           <a href="{% url 'add_friend' %}" class="add__friend">
             <img src="{% static 'assets/add-plus.svg' %}" />
@@ -92,7 +96,7 @@
       </div>
       <!-- users -->
       <main>
-        {% for room in private_rooms %}
+        {% for room in private_rooms %} {% if room.user == request.user %}
         <a href="{% url 'message_room' room.id %}" class="user__container">
           <img src="{{room.friend.user_info.avatar.url}}" class="user__img" />
           <div class="details__container">
@@ -100,7 +104,15 @@
             <p>@ {{room.friend.username}} {{room.id}}</p>
           </div>
         </a>
-        {% endfor %} {% if request.user.is_authenticated %}
+        {% else %}
+        <a href="{% url 'message_room' room.id %}" class="user__container">
+          <img src="{{room.user.user_info.avatar.url}}" class="user__img" />
+          <div class="details__container">
+            <p>{{room.user.first_name}} {{room.user.last_name}}</p>
+            <p>@ {{room.user.username}} {{room.id}}</p>
+          </div>
+        </a>
+        {% endif %} {% endfor %} {% if request.user.is_authenticated %}
         <h1>Hello{{request.user.username}}</h1>
         <a href="{% url 'logout' %}">Logout</a>
         {% else %}

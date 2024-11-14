@@ -13,6 +13,9 @@ from django.contrib.auth.models import User
 def home(request):
     q = request.GET.get('q', '')  # Default to empty string if 'q' is not provided
     user_info = User_Info.objects.get(user=request.user)
+    have_request = False
+    if user_info.request_friend.count() != 0:
+        have_request = True
 
     # Filter friends based on search query
     friends = user_info.friends.filter(
@@ -22,12 +25,22 @@ def home(request):
     )
 
     for friend in friends:
-        if not Private_rooms.objects.filter(user=user_info.user, friend=friend).exists():
-            Private_rooms.objects.create(user=user_info.user, friend=friend)
+        user_id = user_info.user.id
+        friend_id = friend.id
+
+        # Normalize the user order
+        user1_id = min(user_id, friend_id)
+        user2_id = max(user_id, friend_id)
+
+        # Check if a room already exists for this pair of users
+        if not Private_rooms.objects.filter(user_id=user1_id, friend_id=user2_id).exists():
+            # If not, create a new room
+            Private_rooms.objects.get_or_create(user_id=user1_id, friend_id=user2_id)
 
     # Filter private rooms based on search query
     private_rooms = Private_rooms.objects.filter(
-        user=user_info.user
+        Q(user=user_info.user) |
+        Q(friend=user_info.user)
     ).filter(
         Q(friend__username__icontains=q) |
         Q(friend__last_name__icontains=q) |
@@ -38,6 +51,7 @@ def home(request):
         'user_info': user_info,
         'friends': friends,
         'private_rooms': private_rooms,
+        'have_request': have_request
     }
     return render(request, 'home.html', context)
 
@@ -58,16 +72,26 @@ def message_room_view(request, pk):
                 Private_messages.objects.create(content=message, room=room, user=request.user)
         elif room_id:
             room_to_delete = Private_rooms.objects.get(id=room_id)
-            if room_to_delete.friend in user_info.friends.all():
-                user_info.friends.remove(room_to_delete.friend)
-                room_to_delete.delete()
-                return redirect('home')
+            if room_to_delete.user == request.user:
+                if room_to_delete.friend in user_info.friends.all():
+                    user_info.friends.remove(room_to_delete.friend)
+                    room_to_delete.friend.user_info.friends.remove(request.user)
+                    room_to_delete.delete()
+                    return redirect('home')
+            else:
+                if room_to_delete.user in user_info.friends.all():
+                    user_info.friends.remove(room_to_delete.user)
+                    room_to_delete.user.user_info.friends.remove(request.user)
+                    room_to_delete.delete()
+                    return redirect('home')
             
     context = {
         'room': room,
-        'messages': messages
+        'messages': messages, 
     }
     return render(request, 'message.html', context)
+
+
 
 @login_required(login_url='login')
 def add_friend(request):
@@ -101,6 +125,7 @@ def requested_friend_view(request):
             user_info.friends.add(accept_user)
             user_info.request_friend.remove(accept_user)
             accept_user.user_info.friends.add(request.user)
+            # Private_rooms.objects.get_or_create(user=user_info.user, )
         elif deny:
             deny_user = User.objects.get(id=deny)
             user_info.request_friend.remove(deny_user)

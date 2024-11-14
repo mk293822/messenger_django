@@ -15,12 +15,21 @@
           <a href="{% url 'home' %}" class="back">
             <img src="{% static 'assets/arrow-back-basic-svgrepo-com.svg' %}" />
           </a>
+          {% if request.user == room.user %}
           <a class="round__user">
             <img src="{{room.friend.user_info.avatar.url}}" />
           </a>
           <a class="name__info">
             <p>{{room.friend.username}}</p>
           </a>
+          {% else %}
+          <a class="round__user">
+            <img src="{{room.user.user_info.avatar.url}}" />
+          </a>
+          <a class="name__info">
+            <p>{{room.user.username}}</p>
+          </a>
+          {% endif %}
         </div>
         <div class="header__right">
           <a class="call__container">
@@ -48,11 +57,19 @@
     <!-- body section -->
     <main>
       <div class="container">
+        {% if request.user == room.user %}
         <a class="message__topic">
           <img src="{{room.friend.user_info.avatar.url}}" />
           <p>{{room.friend.username}}</p>
           <small>12:00</small>
         </a>
+        {% else %}
+        <a class="message__topic">
+          <img src="{{room.user.user_info.avatar.url}}" />
+          <p>{{room.user.username}}</p>
+          <small>12:00</small>
+        </a>
+        {% endif %}
         <input type="hidden" value="{{messages.count}}" class="count" />
         {% for message in messages %} {% if message.user != request.user %}
         <div class="message receive">
