@@ -87,12 +87,17 @@
           <img src="{{user_info.avatar.url}}" />
           <p>Your note</p>
         </div>
-        {% for room in private_rooms %}
+        {% for room in private_rooms %} {% if room.user == request.user %}
         <a href="{% url 'message_room' room.id %}" class="other_users__though">
           <img src="{{room.friend.user_info.avatar.url}}" />
           <p>{{room.friend.username}}</p>
         </a>
-        {% endfor %}
+        {% else %}
+        <a href="{% url 'message_room' room.id %}" class="other_users__though">
+          <img src="{{room.user.user_info.avatar.url}}" />
+          <p>{{room.user.username}}</p>
+        </a>
+        {% endif %} {% endfor %}
       </div>
       <!-- users -->
       <main>

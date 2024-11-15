@@ -9,4 +9,5 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('add_friend/', views.add_friend, name='add_friend'),
     path('request_friend_noti/', views.requested_friend_view, name='request_friend'),
+    path('like_send/<str:pk>/', views.like_send, name='like_send'),
 ]

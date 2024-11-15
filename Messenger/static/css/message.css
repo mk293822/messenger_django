@@ -258,3 +258,9 @@ footer>.footer{
     padding:7px 0 7px 10px;
     width: 100%;
 }
+
+.like__container{
+    background-color: var(--color-bg-dark);
+    border: none;
+    outline: none;
+}

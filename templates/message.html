@@ -76,11 +76,11 @@
           <div class="round__img">
             <img src="{{message.user.user_info.avatar.url}}" />
           </div>
-          <button class="message__button">{{message.content}}</button>
+          <button class="message__button">{{message.content|safe}}</button>
         </div>
         {% else %}
         <div class="message sent">
-          <button class="message__button">{{message.content}}</button>
+          <button class="message__button">{{message.content|safe}}</button>
         </div>
         {% endif %} {% endfor %}
       </div>
@@ -89,6 +89,7 @@
     <!-- footer section -->
     <footer>
       <div class="footer">
+        <input type="hidden" value="{{room.id}}" id="roomId" />
         <a href="" class="plus__container">
           <img src="{% static 'assets/add-plus-circle-svgrepo-com.svg' %}" />
         </a>
@@ -107,7 +108,7 @@
           {% csrf_token %}
           <input type="text" name="message" placeholder="Message" />
         </form>
-        <a href="" class="like__container">
+        <a class="like__container">
           <img src="{% static 'assets/like-1385-svgrepo-com.svg' %}" />
         </a>
       </div>

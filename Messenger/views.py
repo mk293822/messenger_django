@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Rooms, Messages, Private_rooms, Private_messages, User_Info
 from django.contrib import messages
 from .forms import MyUserCreationForm
@@ -6,7 +6,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth.models import User
-
+from django.http import JsonResponse
+import json
+import uuid
 
 
 @login_required(login_url='login')
@@ -91,6 +93,15 @@ def message_room_view(request, pk):
     }
     return render(request, 'message.html', context)
 
+
+def like_send(request, pk):
+    svg_data = request.POST.get('svg')
+    room_id = uuid.UUID(pk)
+    room = get_object_or_404(Private_rooms, id=room_id)
+    if svg_data:
+        Private_messages.objects.create(room=room, content=svg_data, user=request.user)
+        
+    return JsonResponse({'message':'success'})
 
 
 @login_required(login_url='login')
