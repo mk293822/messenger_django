@@ -68,7 +68,7 @@ a {
   justify-content: space-between;
   align-items: center;
   font-size: 1.5pc;
-  z-index: 1000;
+  z-index: 10000;
   top: 0;
   left: 0;
 }
@@ -111,7 +111,8 @@ a {
     position: fixed; /* Fixed to the left side */
     left: -250px; /* Initially hidden off-screen */
     top: 0;
-    background-color: var(--color-bg-dark); /* Dark background */
+    z-index: 1000;
+    background-color: var(--color-gray); /* Dark background */
     color: var(--color-font);
     transition: left 0.3s ease; /* Smooth transition for opening/closing */
     padding-top: 20px;
@@ -144,7 +145,7 @@ a {
 }
 
 .sidebar ul li a:hover {
-    background-color: #575757; /* Darker shade on hover */
+    background-color: var(--color-light-gray); /* Darker shade on hover */
 }
 
 .sidebar.active {

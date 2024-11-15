@@ -40,11 +40,11 @@ const likesvg = `
 ` 
 const likeBtn = document.querySelector('.like__container');
 const roomId = document.getElementById('roomId').value;
-const url = `/like_send/${roomId}/`
+const url1 = `/like_send/${roomId}/`
 
 likeBtn.addEventListener('click', () => {
   //console.log('haha')
-  fetch(url, {
+  fetch(url1, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -72,11 +72,44 @@ function getCookie(name) {
   return null
 }
 
-let message_svg = document.querySelectorAll('.message__button');
+let messageButtons = document.querySelectorAll('.message__button');
 
-message_svg.forEach(element => {
+messageButtons.forEach(element => {
   if (element.querySelector('svg')) {
     element.style.background = 'none';
     element.style.border = 'none';
-  }
+  } 
 });
+
+
+// Image send read file
+
+const imageBtn = document.querySelector('.gallery__container');
+const imageInput = document.getElementById('image_input');
+
+imageBtn.addEventListener('click', () => {
+  imageInput.click()
+});
+
+imageInput.addEventListener('change', (event) => {
+  const file = event.target.files[0];
+  const formData = new FormData();
+  formData.append('img', file);
+  formData.append('room_id', roomId);
+
+  const url2 = `/image_send/${roomId}/`;
+
+  fetch(url2, {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: formData
+  }).then(response => response.text()).then(data => {
+    console.log(`success: ${data}`);
+    location.reload();  // Consider updating the UI instead of reloading
+  }).catch(error => {
+    console.error('Error:', error);
+  });
+});
+

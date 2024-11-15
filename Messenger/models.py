@@ -51,8 +51,8 @@ class Private_messages(models.Model):
     room = models.ForeignKey(Private_rooms, on_delete=models.CASCADE, related_name='private_messages')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='private_messages')  
     content = models.TextField(blank=True)
-    image = models.ImageField(null=True, blank=True,upload_to='images')
-    video = models.FileField(null=True,blank=True,upload_to='file')
+    image = models.ImageField(null=True, blank=True,upload_to='images/')
+    video = models.FileField(null=True,blank=True,upload_to='file/')
     created = models.DateTimeField(auto_now=True, editable=False)
 
     class Meta:
@@ -83,8 +83,8 @@ class Messages(models.Model):
     room = models.ForeignKey(Rooms, on_delete=models.CASCADE, related_name='messages')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='group_messages')  
     content = models.TextField(blank=True)
-    image = models.ImageField(null=True, blank=True,upload_to='images')
-    video = models.FileField(null=True,blank=True,upload_to='file')
+    image = models.ImageField(null=True, blank=True,upload_to='images/')
+    video = models.FileField(null=True,blank=True,upload_to='file/')
     created = models.DateTimeField(auto_now=True, editable=False)
 
     class Meta:

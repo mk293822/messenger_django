@@ -76,11 +76,23 @@
           <div class="round__img">
             <img src="{{message.user.user_info.avatar.url}}" />
           </div>
+          {% if message.content %}
           <button class="message__button">{{message.content|safe}}</button>
+          {% else %}
+          <button class="message__button" style="background: none">
+            <img src="{{message.image.url|safe}}" />
+          </button>
+          {% endif %}
         </div>
         {% else %}
         <div class="message sent">
+          {% if message.content %}
           <button class="message__button">{{message.content|safe}}</button>
+          {% else %}
+          <button class="message__button" style="background: none">
+            <img src="{{message.image.url|safe}}" />
+          </button>
+          {% endif %}
         </div>
         {% endif %} {% endfor %}
       </div>
@@ -98,7 +110,13 @@
             src="{% static 'assets/photo-camera-photograph-svgrepo-com.svg' %}"
           />
         </a>
-        <a href="" class="gallery__container">
+        <input
+          type="file"
+          id="image_input"
+          accept="image/*"
+          style="display: none"
+        />
+        <a class="gallery__container">
           <img src="{% static 'assets/image-svgrepo-com.svg' %}" />
         </a>
         <a href="" class="microphone__container">

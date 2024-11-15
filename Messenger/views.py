@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.http import JsonResponse
+from django.core.files.storage import default_storage
 import json
 import uuid
 
@@ -102,6 +103,16 @@ def like_send(request, pk):
         Private_messages.objects.create(room=room, content=svg_data, user=request.user)
         
     return JsonResponse({'message':'success'})
+
+def image_send(request,pk):
+    img_data = request.FILES['img']
+    room_id = uuid.UUID(pk)
+    room = get_object_or_404(Private_rooms, id=room_id)
+    img =  default_storage.save('images/'+img_data.name,img_data)
+    if img_data:
+        Private_messages.objects.create(room=room, image=img, user=request.user)
+        
+    return JsonResponse({'message': 'success'})
 
 
 @login_required(login_url='login')
